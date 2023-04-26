@@ -4203,6 +4203,7 @@ input, select, textarea {
 .rating {
     color: #E4BB23;
 	 color: black;
+	 font-size:1rem;
 
 }
 .review {

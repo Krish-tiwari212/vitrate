@@ -54,12 +54,10 @@
                                         <p class="overview">
                                             <a href="{{l[i]['link']}}"></a>
                                         </p>
-                                        <ul class="actions small">
-                                            <li><a class="button primary small fit update"
-                                                   href="{{url_for('review',num=l[i]['id'])}}">Rate</a></li>
-                                            <li><a class="button primary small fit delete-button" href="#">Comment
-                                                Section</a></li>
-                                        </ul>
+
+                                            <a class="button primary small fit update"
+                                                   href="{{url_for('review',num=l[i]['id'])}}">Rate or View Comments</a>
+
 
                                     </div>
                                 </div>
@@ -95,9 +93,7 @@
                                         </p>
                                         <ul class="actions small">
                                             <li><a class="button primary small fit update"
-                                                   href="{{url_for('review',num=l[i]['id'])}}">Rate</a></li>
-                                            <li><a class="button primary small fit delete-button" href="#">Comment
-                                                Section</a></li>
+                                                   href="{{url_for('review',num=l[i]['id'])}}">Rate Or View Comments</a></li>
                                         </ul>
 
                                     </div>

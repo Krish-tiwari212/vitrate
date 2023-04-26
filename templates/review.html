@@ -1,0 +1,66 @@
+{% include "header.html" %}
+<section id="banner">
+					<div class="content">
+						<header>
+							<h2 class="signup-text">Rate This Faculty</h2>
+							<br>
+							<section>
+								<form action="{{url_for('review',num=n)}}" method="post">
+									<div class="row gtr-uniform gtr-50">
+										<div class="col-12">
+											<select name="da" id="category">
+												<option value="0">- Marks -</option>
+												<option value="1">⭐</option>
+												<option value="2">⭐⭐</option>
+												<option value="3">⭐⭐⭐</option>
+												<option value="4">⭐⭐⭐⭐</option>
+                                                <option value="5">⭐⭐⭐⭐⭐</option>
+											</select>
+										</div>
+                                        <div class="col-12">
+											<select name="attend" id="category">
+												<option value="0">- Attendance -</option>
+												<option value="1">⭐</option>
+												<option value="2">⭐⭐</option>
+												<option value="3">⭐⭐⭐</option>
+												<option value="4">⭐⭐⭐⭐</option>
+                                                <option value="5">⭐⭐⭐⭐⭐</option>
+											</select>
+										</div>
+										<div class="col-12">
+											<select name="marks" id="category">
+												<option value="0">- Teaching -</option>
+												<option value="1">⭐</option>
+												<option value="2">⭐⭐</option>
+												<option value="3">⭐⭐⭐</option>
+												<option value="4">⭐⭐⭐⭐</option>
+                                                <option value="5">⭐⭐⭐⭐⭐</option>
+											</select>
+										</div>
+										<div class="col-12">
+											<select name="research" id="category">
+												<option value="0">- Research -</option>
+												<option value="1">⭐</option>
+												<option value="2">⭐⭐</option>
+												<option value="3">⭐⭐⭐</option>
+												<option value="4">⭐⭐⭐⭐</option>
+                                                <option value="5">⭐⭐⭐⭐⭐</option>
+											</select>
+										</div>
+										<div class="col-12">
+											<textarea name="message" id="message" placeholder="Enter your message" rows="6"></textarea>
+										</div>
+										<div class="col-12">
+											<ul class="actions">
+												<li><input type="submit" value="Submit" class="primary" /></li>
+											</ul>
+										</div>
+									</div>
+								</form>
+							</section>
+						</header>
+<!--						<span class="image"><img src="https://images.unsplash.com/photo-1600096194534-95cf5ece04cf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="" /></span>-->
+					</div>
+					<a href="#footer" class="goto-next scrolly">Next</a>
+</section>
+{% include "footer.html" %}

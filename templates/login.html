@@ -1,0 +1,32 @@
+{% include "header.html" %}
+<section id="banner">
+					<div class="content">
+						<header>
+							<h2 class="signup-text">Log In</h2>
+							<br>
+							<section>
+								<form action="{{url_for('login')}}" method="post">
+									{% if l==1: %}
+									<label class="wrong-cred-label">Wrong Credentials!</label>
+									{% endif %}
+									<div class="row gtr-uniform gtr-50">
+										<div class="col-12">
+											<input type="email" name="email" id="email" value="" placeholder="Email" />
+										</div>
+										<div class="col-12">
+											<input type="password" name="password" id="password" value="" placeholder="Password" />
+										</div>
+										<div class="col-12">
+											<ul class="actions">
+												<li><input type="submit" value="Let Me In" class="primary" /></li>
+											</ul>
+										</div>
+									</div>
+								</form>
+							</section>
+						</header>
+<!--						<span class="image"><img src="https://images.unsplash.com/photo-1600096194534-95cf5ece04cf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="" /></span>-->
+					</div>
+					<a href="#footer" class="goto-next scrolly">Next</a>
+</section>
+{% include "footer.html" %}

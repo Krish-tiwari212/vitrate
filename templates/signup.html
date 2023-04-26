@@ -1,0 +1,60 @@
+{% include "header.html" %}
+<section id="banner">
+					<div class="content">
+						<header>
+							<h2 class="signup-text">Sign Up</h2>
+							<br>
+							<section>
+								<form action="{{url_for('signup')}}" method="post">
+									{% if l==1: %}
+									<label class="wrong-cred-label">You can't leave a field empty!</label>
+									{% endif %}
+									{% if p==1: %}
+									<label class="wrong-cred-label">Password length should be above 8 characters!</label>
+									{% endif %}
+									<div class="row gtr-uniform gtr-50">
+										<div class="col-6 col-12-xsmall">
+											<input type="text" name="name" id="name" value="" placeholder="Name" />
+										</div>
+										<div class="col-6 col-12-xsmall">
+											<input type="email" name="email" id="email" value="" placeholder="Email" />
+										</div>
+										<div class="col-12">
+											<select name="branch" id="category">
+												<option value="">- Select a Branch -</option>
+												<option value="Computer Science and Engineering">Computer Science and Engineering</option>
+												<option value="Electronics and Computer Engineering">Electronics and Computer Engineering</option>
+												<option value="Electronics and Electrical Engineering">Electronics and Electrical Engineering</option>
+												<option value="Electronics and Communication Engineering">Electronics and Communication Engineering</option>
+                                                <option value="Civil Engineering">Civil Engineering</option>
+                                                <option value="Fashion Technology">Fashion Technology</option>
+											</select>
+										</div>
+                                        <div class="col-6 col-12-xsmall">
+											<select name="year" id="category">
+												<option value="">- Select Your Year of Passing -</option>
+												<option value="2023">2023</option>
+												<option value="2024">2024</option>
+												<option value="2025">2025</option>
+												<option value="2026">2026</option>
+                                                <option value="2027">2027</option>
+                                                <option value="2028">2028</option>
+											</select>
+										</div>
+										<div class="col-6 col-12-xsmall">
+											<input type="password" name="password" id="password" value="" placeholder="Password" />
+										</div>
+										<div class="col-12">
+											<ul class="actions">
+												<li><input type="submit" value="Sign Me Up" class="primary" /></li>
+											</ul>
+										</div>
+									</div>
+								</form>
+							</section>
+						</header>
+<!--						<span class="image"><img src="https://images.unsplash.com/photo-1600096194534-95cf5ece04cf?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="" /></span>-->
+					</div>
+					<a href="#footer" class="goto-next scrolly">Next</a>
+</section>
+{% include "footer.html" %}

@@ -1,0 +1,138 @@
+{% include "header.html" %}
+
+<!-- Main -->
+<div class="wrapper style1" id="main">
+    <div class="container">
+        <header class="major">
+            <h2>All Faculties Of VIT Chennai</h2>
+            <p>Review and rate the faculties</p>
+        </header>
+
+        <!-- Content -->
+        <section id="content">
+            <!--								<a href="#" class="image fit"><img src="images/pic07.jpg" alt="" /></a>-->
+            <!--								<h3>Dolore Amet Consequat</h3>-->
+            <!--								<p>Aliquam massa urna, imperdiet sit amet mi non, bibendum euismod est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam quam, mollis at magna consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam cubilia adipiscing interdum aliquet aliquet placerat cubilia accumsan cep ante nullam adipiscing tortor odio. Iaculis adipiscing accumsan nascetur in cras. Lacinia placerat.</p>-->
+            <!--								<p>Vestibulum diam quam, mollis at consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum. Morbi mattis elementum orci, nec dictum porta cursus justo. Quisque ultricies lorem in ligula condimentum, et egestas turpis sagittis. Cras ac nunc urna. Nullam eget lobortis purus. Phasellus vitae tortor non est placerat tristique faucibus magna adipiscing aliquet blandit nisi dolor accumsan nascetur lorem. Vis enim. Curae. Mi arcu vis aliquam ipsum non accumsan ac mi faucibus amet eu accumsan erat interdum semper accumsan. Eu sagittis tellus accumsan neque lorem penatibus in porttitor. Vivamus commodo curae. Condimentum lobortis praesent id ac lorem. Lorem vis ipsum dolor feugiat consequat dolore adipiscing.</p>-->
+            <!--								<h3>Sed Magna Ornare</h3>-->
+            <!--								<p>In vestibulum massa quis arcu lobortis tempus. Nam pretium arcu in odio vulputate luctus. Suspendisse euismod lorem eget lacinia fringilla. Sed sed felis justo. Nunc sodales elit in laoreet aliquam. Nam gravida, nisl sit amet iaculis porttitor, risus nisi rutrum metus. In accumsan lorem nunc ultrices a ac eu accumsan ac id nullam. Nec lobortis. Faucibus. Mi commodo laoreet arcu at non mi lacinia aliquet non lobortis phasellus accumsan nascetur varius. Integer orci porttitor eu faucibus aliquet faucibus ac accumsan adipiscing accumsan odio. Ut adipiscing.</p>-->
+            <!--								<ul>-->
+            <!--									<li>Faucibus orci lobortis ac adipiscing integer.</li>-->
+            <!--									<li>Col accumsan arcu mi aliquet placerat.</li>-->
+            <!--									<li>Lobortis vestibulum ut magna tempor massa nascetur.</li>-->
+            <!--									<li>Blandit massa non blandit tempor interdum.</li>-->
+            <!--									<li>Lacinia mattis arcu nascetur lobortis.</li>-->
+            <!--								</ul>-->
+            <div class="album">
+                <div class="container">
+
+                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2  row-cols-lg-3">
+                        {% if (n|int*12)+12<1138: %}
+                        {% for i in range(n|int*12,(n|int*12)+12): %}
+                        <div class="col">
+                            <div class="card">
+                                <div class="front"
+                                     style="background-image: url('{{l[i]['image']}}');">
+                                </div>
+                                <div class="back">
+                                    <div>
+                                        <div class="title">{{l[i]['name']}} <span class="release_date">{{l[i]['designation']}}</span>
+                                        </div>
+                                        <div class="rating">
+                                            <br>
+                                            {% if l[i]['id']|int in rating: %}
+                                            <label>{{ rating[l[i]['id']]["da"] }} ⭐ For Marks </label>
+                                            <label>{{ rating[l[i]['id']]["attendance"] }} ⭐ For Attendance</label>
+                                            <label>{{ rating[l[i]['id']]["marks"] }} ⭐ For Marks</label>
+                                            <label>{{ rating[l[i]['id']]["re"] }} ⭐ For Research</label>
+                                            {% else: %}
+                                            <label>Unrated ⭐</label>
+                                            <!--                                                <i class="fas fa-star star"></i>-->
+                                            {% endif %}
+                                        </div>
+                                        <!--                                        <p class="review">"Very Good"</p>-->
+                                        <p class="overview">
+                                            <a href="{{l[i]['link']}}"></a>
+                                        </p>
+                                        <ul class="actions small">
+                                            <li><a class="button primary small fit update"
+                                                   href="{{url_for('review',num=l[i]['id'])}}">Rate</a></li>
+                                            <li><a class="button primary small fit delete-button" href="#">Comment
+                                                Section</a></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% else: %}
+                        {% for i in range(n|int*12,1138): %}
+                        <div class="col">
+                            <div class="card">
+                                <div class="front"
+                                     style="background-image: url('{{l[i]['image']}}');">
+                                </div>
+                                <div class="back">
+                                    <div>
+                                        <div class="title">{{l[i]['name']}} <span class="release_date">{{l[i]['designation']}}</span>
+                                        </div>
+                                        <div class="rating">
+                                            <br>
+                                            {% if l[i]['id']|int in rating: %}
+                                            <p>{{ rating[l[i]['id']]["da"] }} ⭐ For Marks </p>
+                                            <p>{{ rating[l[i]['id']]["attendance"] }} ⭐ For Attendance</p>
+                                            <p>{{ rating[l[i]['id']]["marks"] }} ⭐ For Marks</p>
+                                            <p>{{ rating[l[i]['id']]["re"] }} ⭐ For Research</p>
+                                            {% else: %}
+                                            <label>Unrated ⭐</label>
+                                            <!--                                                <i class="fas fa-star star"></i>-->
+                                            {% endif %}
+                                        </div>
+                                        <!--                                        <p class="review">"Very Good"</p>-->
+                                        <p class="overview">
+                                            <a href="{{l[i]['link']}}"></a>
+                                        </p>
+                                        <ul class="actions small">
+                                            <li><a class="button primary small fit update"
+                                                   href="{{url_for('review',num=l[i]['id'])}}">Rate</a></li>
+                                            <li><a class="button primary small fit delete-button" href="#">Comment
+                                                Section</a></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center">
+                <ul class="actions small">
+                    {% if n|int ==-1 or n|int ==94: %}
+                    <li><a class="button small fit" href="{{url_for('all_prof',num=n|int-1)}}">Back</a></li>
+                    <li><a class="button small fit" href="{{url_for('all_prof',num=0)}}">1st</a></li>
+                    <li><a class="button primary small fit" href="{{url_for('all_prof',num=n|int-2)}}">{{n|int-2}}</a>
+                    </li>
+                    <li><a class="button primary small fit" href="{{url_for('all_prof',num=n|int-1)}}">{{n|int-1}}</a>
+                    </li>
+                    {% else: %}
+                    <li><a class="button small fit" href="{{url_for('all_prof',num=n|int-1)}}">Back</a></li>
+                    <li><a class="button small fit" href="{{url_for('all_prof',num=0)}}">1st</a></li>
+                    <li><a class="button primary small fit" href="{{url_for('all_prof',num=n)}}">{{n|int+1}}</a></li>
+                    <li><a class="button small fit" href="{{url_for('all_prof',num=n|int+1)}}">{{n|int+2}}</a></li>
+                    <li><a class="button small fit" href="{{url_for('all_prof',num=n|int+2)}}">{{n|int+3}}</a></li>
+                    <li><a class="button small fit" href="{{url_for('all_prof',num=94)}}">Last</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+
+        </section>
+
+    </div>
+</div>
+
+<!-- Footer -->
+{% include "footer.html" %}

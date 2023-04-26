@@ -42,7 +42,7 @@
                                             <label>{{ rating[l['id']]["da"] }} ⭐ For Marks </label>
                                             <label>{{ rating[l['id']]["attendance"] }} ⭐ For Attendance</label>
                                             <label>{{ rating[l['id']]["marks"] }} ⭐ For Teaching</label>
-                                            <label>{{ rating[l['id']]["research"] }} ⭐ For Research</label>
+                                            <label>{{ rating[l['id']]["re"] }} ⭐ For Research</label>
                                             {% else: %}
                                             <label>Unrated ⭐</label>
                                             <!--                                                <i class="fas fa-star star"></i>-->
@@ -52,12 +52,8 @@
                                         <p class="overview">
                                             <a href="{{l['link']}}"></a>
                                         </p>
-                                        <ul class="actions small">
-                                            <li><a class="button primary small fit update"
-                                                   href="{{url_for('review',num=l['id'])}}">Rate</a></li>
-                                            <li><a class="button primary small fit delete-button" href="#">Comment
-                                                Section</a></li>
-                                        </ul>
+                                        <a class="button primary small fit update"
+                                                   href="{{url_for('review',num=l['id'])}}">Rate or View Comments</a>
 
                                     </div>
                                 </div>

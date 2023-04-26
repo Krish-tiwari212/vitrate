@@ -1,11 +1,7 @@
 from flask import Flask, render_template, redirect, request, url_for, flash
-from flask_bootstrap import Bootstrap
-from flask_ckeditor import CKEditor
-from flask_gravatar import Gravatar
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
-from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 import os
@@ -72,7 +68,7 @@ with app.app_context():
     # for elem in data:
     #     new_prof = ProfData(name=elem["name"],designation=elem["designation"],link=elem["link"],image=elem["image"])
     #     db.session.add(new_prof)
-    # db.create_all()
+    db.create_all()
     # db.session.commit()
     data = ProfData.query.all()
     rev = Review.query.all()
@@ -93,19 +89,18 @@ def load_user(user_id):
 def home():
     return render_template("index.html")
 
+@app.errorhandler(404)
+def invalid_route(e):
+    return render_template('404.html')
 
 @app.route("/all-prof/<num>")
 def all_prof(num):
     prof_ratings = {}
     for prof in data:
-        avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).filter(Review.da != 0).scalar()
-        avg_rating_attend = db.session.query(func.avg(Review.attendance)).filter_by(prof_id=prof.id).filter(
-            Review.attendance != 0).scalar()
-        avg_rating_marks = db.session.query(func.avg(Review.marks)).filter_by(prof_id=prof.id).filter(
-            Review.marks != 0).scalar()
-        avg_rating_research = db.session.query(func.avg(Review.research)).filter_by(prof_id=prof.id).filter(
-            Review.research != 0).scalar()
-
+        avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).filter(Review.da!=0).scalar() or "Unrated"
+        avg_rating_attend = db.session.query(func.avg(Review.attendance)).filter_by(prof_id=prof.id).filter(Review.attendance!=0).scalar() or "Unrated"
+        avg_rating_marks = db.session.query(func.avg(Review.marks)).filter_by(prof_id=prof.id).filter(Review.marks!=0).scalar() or "Unrated"
+        avg_rating_research = db.session.query(func.avg(Review.research)).filter_by(prof_id=prof.id).filter(Review.research!=0).scalar() or "Unrated"
         try:
             avg_rating_da = round(avg_rating_da, 1)
             avg_rating_attend = round(avg_rating_attend, 1)
@@ -171,13 +166,14 @@ def logout():
 def search():
     prof_ratings = {}
     for prof in data:
-        avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).filter(Review.da != 0).scalar()
+        avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).filter(
+            Review.da != 0).scalar() or "Unrated"
         avg_rating_attend = db.session.query(func.avg(Review.attendance)).filter_by(prof_id=prof.id).filter(
-            Review.attendance != 0).scalar()
+            Review.attendance != 0).scalar() or "Unrated"
         avg_rating_marks = db.session.query(func.avg(Review.marks)).filter_by(prof_id=prof.id).filter(
-            Review.marks != 0).scalar()
+            Review.marks != 0).scalar() or "Unrated"
         avg_rating_research = db.session.query(func.avg(Review.research)).filter_by(prof_id=prof.id).filter(
-            Review.research != 0).scalar()
+            Review.research != 0).scalar() or "Unrated"
         try:
             avg_rating_da = round(avg_rating_da, 1)
             avg_rating_attend = round(avg_rating_attend, 1)
@@ -186,7 +182,7 @@ def search():
             # avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).scalar()
             # avg_rating_da = round(avg_rating_da, 1)
             prof_ratings[prof.id] = {"da": avg_rating_da, "attendance": avg_rating_attend, "marks": avg_rating_marks,
-                                     "reasearch": avg_rating_research}
+                                     "re": avg_rating_research}
         except TypeError:
             pass
 

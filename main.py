@@ -47,20 +47,20 @@ class Review(db.Model):
     author = db.relationship("User", back_populates="review")
     prof_id = db.Column(db.Integer, db.ForeignKey('prof_data.id'))
     prof = db.relationship("ProfData", back_populates="review")
-    da = db.Column(db.VARCHAR(250))
-    attendance = db.Column(db.VARCHAR(250))
-    marks = db.Column(db.VARCHAR(250))
-    research = db.Column(db.VARCHAR(250))
+    da = db.Column(db.VARCHAR(200))
+    attendance = db.Column(db.VARCHAR(200))
+    marks = db.Column(db.VARCHAR(200))
+    research = db.Column(db.VARCHAR(200))
     # text = db.Column(db.TEXT, nullable=False)
 
 
 class ProfData(db.Model):
     __tablename__ = 'prof_data'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    designation = db.Column(db.String(100))
-    link = db.Column(db.String(100))
-    image = db.Column(db.String(100))
+    name = db.Column(db.Text)
+    designation = db.Column(db.Text)
+    link = db.Column(db.Text)
+    image = db.Column(db.Text)
     review = db.relationship("Review", back_populates="prof")
 
 
@@ -70,7 +70,7 @@ with app.app_context():
     #     db.session.add(new_prof)
     db.create_all()
     # db.session.commit()
-    # data = ProfData.query.all()
+    data = ProfData.query.all()
     rev = Review.query.all()
     c = User.query.all()
 
@@ -87,10 +87,10 @@ def load_user(user_id):
 
 @app.route("/")
 def home():
-    for elem in data:
-        new_prof = ProfData(name=elem["name"],designation=elem["designation"],link=elem["link"],image=elem["image"])
-        db.session.add(new_prof)
-    db.session.commit()
+    # for elem in data:
+    #     new_prof = ProfData(name=elem["name"],designation=elem["designation"],link=elem["link"],image=elem["image"])
+    #     db.session.add(new_prof)
+    # db.session.commit()
     return render_template("index.html")
 
 
@@ -103,19 +103,19 @@ def invalid_route(e):
 def all_prof(num):
     prof_ratings = {}
     for prof in data:
-        avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).filter(
-            Review.da != 0).scalar() or "Unrated"
-        avg_rating_attend = db.session.query(func.avg(Review.attendance)).filter_by(prof_id=prof.id).filter(
-            Review.attendance != 0).scalar() or "Unrated"
-        avg_rating_marks = db.session.query(func.avg(Review.marks)).filter_by(prof_id=prof.id).filter(
-            Review.marks != 0).scalar() or "Unrated"
-        avg_rating_research = db.session.query(func.avg(Review.research)).filter_by(prof_id=prof.id).filter(
-            Review.research != 0).scalar() or "Unrated"
+        avg_rating_da = db.session.query(func.avg(func.nullif(Review.da, '0') \
+                                                  .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
+        avg_rating_attend = db.session.query(func.avg(func.nullif(Review.attendance, '0') \
+                                                      .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
+        avg_rating_marks = db.session.query(func.avg(func.nullif(Review.marks, '0') \
+                                                     .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
+        avg_rating_research = db.session.query(func.avg(func.nullif(Review.research, '0') \
+                                                        .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
         try:
-            avg_rating_da = round(avg_rating_da, 1)
-            avg_rating_attend = round(avg_rating_attend, 1)
-            avg_rating_marks = round(avg_rating_marks, 1)
-            avg_rating_research = round(avg_rating_research, 1)
+            avg_rating_da = round(avg_rating_da, 1) if avg_rating_da is not None else "unrated"
+            avg_rating_attend = round(avg_rating_attend, 1) if avg_rating_attend is not None else "unrated"
+            avg_rating_marks = round(avg_rating_marks, 1) if avg_rating_marks is not None else "unrated"
+            avg_rating_research = round(avg_rating_research, 1) if avg_rating_research is not None else "unrated"
             # avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).scalar()
             # avg_rating_da = round(avg_rating_da, 1)
             prof_ratings[prof.id] = {"da": avg_rating_da, "attendance": avg_rating_attend, "marks": avg_rating_marks,
@@ -138,7 +138,7 @@ def signup():
         if len(request.form.get("password")) < 8:
             return render_template('signup.html', l=0, p=1)
         password = (generate_password_hash(request.form.get("password"), method='pbkdf2:sha256:260000',
-                                           salt_length=100))[21:]
+                                           salt_length=8))[21:]
         new_user = User(name=name, email=email, branch=branch, year=year, password=password)
         db.session.add(new_user)
         db.session.commit()
@@ -176,19 +176,19 @@ def logout():
 def search():
     prof_ratings = {}
     for prof in data:
-        avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).filter(
-            Review.da != 0).scalar() or "Unrated"
-        avg_rating_attend = db.session.query(func.avg(Review.attendance)).filter_by(prof_id=prof.id).filter(
-            Review.attendance != 0).scalar() or "Unrated"
-        avg_rating_marks = db.session.query(func.avg(Review.marks)).filter_by(prof_id=prof.id).filter(
-            Review.marks != 0).scalar() or "Unrated"
-        avg_rating_research = db.session.query(func.avg(Review.research)).filter_by(prof_id=prof.id).filter(
-            Review.research != 0).scalar() or "Unrated"
+        avg_rating_da = db.session.query(func.avg(func.nullif(Review.da, '0') \
+                                                  .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
+        avg_rating_attend = db.session.query(func.avg(func.nullif(Review.attendance, '0') \
+                                                      .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
+        avg_rating_marks = db.session.query(func.avg(func.nullif(Review.marks, '0') \
+                                                     .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
+        avg_rating_research = db.session.query(func.avg(func.nullif(Review.research, '0') \
+                                                        .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
         try:
-            avg_rating_da = round(avg_rating_da, 1)
-            avg_rating_attend = round(avg_rating_attend, 1)
-            avg_rating_marks = round(avg_rating_marks, 1)
-            avg_rating_research = round(avg_rating_research, 1)
+            avg_rating_da = round(avg_rating_da, 1) if avg_rating_da is not None else "Unrated"
+            avg_rating_attend = round(avg_rating_attend, 1) if avg_rating_attend is not None else "Unrated"
+            avg_rating_marks = round(avg_rating_marks, 1) if avg_rating_marks is not None else "Unrated"
+            avg_rating_research = round(avg_rating_research, 1) if avg_rating_research is not None else "Unrated"
             # avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).scalar()
             # avg_rating_da = round(avg_rating_da, 1)
             prof_ratings[prof.id] = {"da": avg_rating_da, "attendance": avg_rating_attend, "marks": avg_rating_marks,

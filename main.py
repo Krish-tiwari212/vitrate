@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 import os
 import json
 from algoliasearch.search_client import SearchClient
-import gunicorn
 
 load_dotenv()
 

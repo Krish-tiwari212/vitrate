@@ -70,7 +70,7 @@ with app.app_context():
     #     db.session.add(new_prof)
     db.create_all()
     # db.session.commit()
-    data = ProfData.query.all()
+    # data = ProfData.query.all()
     rev = Review.query.all()
     c = User.query.all()
 
@@ -87,6 +87,10 @@ def load_user(user_id):
 
 @app.route("/")
 def home():
+    for elem in data:
+        new_prof = ProfData(name=elem["name"],designation=elem["designation"],link=elem["link"],image=elem["image"])
+        db.session.add(new_prof)
+    db.session.commit()
     return render_template("index.html")
 
 

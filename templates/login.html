@@ -6,6 +6,7 @@
 							<br>
 							<section>
 								<form action="{{url_for('login')}}" method="post">
+									<label class="wrong-cred-label">If you don't have account then <a href="{{url_for('signup')}}">Sign Up</a> below</label>
 									{% if l==1: %}
 									<label class="wrong-cred-label">Wrong Credentials!</label>
 									{% endif %}
@@ -19,7 +20,9 @@
 										<div class="col-12">
 											<ul class="actions">
 												<li><input type="submit" value="Let Me In" class="primary" /></li>
+												<li><a href="{{url_for('signup')}}" class="button">Or Sign Up</a></li>
 											</ul>
+
 										</div>
 									</div>
 								</form>

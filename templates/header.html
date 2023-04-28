@@ -22,22 +22,8 @@
 							<li><a href="{{url_for('home')}}">Home</a></li>
 							<li>
 								<a href="{{url_for('all_prof',num=0)}}">All Faculties</a>
-								<!-- <ul>
-									<li><a href="left-sidebar.html">All Faculties</a></li>
-									 <li><a href="right-sidebar.html">Right Sidebar</a></li>
-									<li><a href="no-sidebar.html">No Sidebar</a></li>
-									<li>
-										<a href="#">Submenu</a>
-										<ul>
-											<li><a href="#">Option 1</a></li>
-											<li><a href="#">Option 2</a></li>
-											<li><a href="#">Option 3</a></li>
-											<li><a href="#">Option 4</a></li>
-										</ul>
-									</li> -->
-								<!-- </ul> -->
+
 							</li>
-							<!-- <li><a href="elements.html">Elements</a></li> -->
 							{% if not current_user.is_authenticated: %}
 							<li><a href="{{url_for('signup')}}" class="button primary">Sign Up</a></li>
 							<li><a href="{{url_for('login')}}" class="button primary">Log In</a></li>

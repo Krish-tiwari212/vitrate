@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for, flash
+from flask import Flask, render_template, redirect, request, url_for
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
@@ -89,18 +89,24 @@ def load_user(user_id):
 def home():
     return render_template("index.html")
 
+
 @app.errorhandler(404)
 def invalid_route(e):
     return render_template('404.html')
+
 
 @app.route("/all-prof/<num>")
 def all_prof(num):
     prof_ratings = {}
     for prof in data:
-        avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).filter(Review.da!=0).scalar() or "Unrated"
-        avg_rating_attend = db.session.query(func.avg(Review.attendance)).filter_by(prof_id=prof.id).filter(Review.attendance!=0).scalar() or "Unrated"
-        avg_rating_marks = db.session.query(func.avg(Review.marks)).filter_by(prof_id=prof.id).filter(Review.marks!=0).scalar() or "Unrated"
-        avg_rating_research = db.session.query(func.avg(Review.research)).filter_by(prof_id=prof.id).filter(Review.research!=0).scalar() or "Unrated"
+        avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).filter(
+            Review.da != 0).scalar() or "Unrated"
+        avg_rating_attend = db.session.query(func.avg(Review.attendance)).filter_by(prof_id=prof.id).filter(
+            Review.attendance != 0).scalar() or "Unrated"
+        avg_rating_marks = db.session.query(func.avg(Review.marks)).filter_by(prof_id=prof.id).filter(
+            Review.marks != 0).scalar() or "Unrated"
+        avg_rating_research = db.session.query(func.avg(Review.research)).filter_by(prof_id=prof.id).filter(
+            Review.research != 0).scalar() or "Unrated"
         try:
             avg_rating_da = round(avg_rating_da, 1)
             avg_rating_attend = round(avg_rating_attend, 1)

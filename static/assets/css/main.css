@@ -4073,7 +4073,7 @@ input, select, textarea {
 			input[type="reset"],
 			input[type="button"],
 			.button {
-				padding: 0;
+				padding: 5;
 			}
 
 		/* Spotlight */

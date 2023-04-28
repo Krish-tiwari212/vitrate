@@ -65,11 +65,11 @@ class ProfData(db.Model):
 
 
 with app.app_context():
-    for elem in data:
-        new_prof = ProfData(name=elem["name"],designation=elem["designation"],link=elem["link"],image=elem["image"])
-        db.session.add(new_prof)
+    # for elem in data:
+    #     new_prof = ProfData(name=elem["name"],designation=elem["designation"],link=elem["link"],image=elem["image"])
+    #     db.session.add(new_prof)
     db.create_all()
-    db.session.commit()
+    # db.session.commit()
     data = ProfData.query.all()
     rev = Review.query.all()
     c = User.query.all()

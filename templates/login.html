@@ -6,7 +6,7 @@
 							<br>
 							<section>
 								<form action="{{url_for('login')}}" method="post">
-									<label class="wrong-cred-label">If you don't have account then <a href="{{url_for('signup')}}">Sign Up</a> below</label>
+									<label class="wrong-cred-label">If you don't have account then <a href="{{url_for('signup')}}">Sign Up</a></label>
 									{% if l==1: %}
 									<label class="wrong-cred-label">Wrong Credentials!</label>
 									{% endif %}

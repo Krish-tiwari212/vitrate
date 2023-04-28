@@ -24,9 +24,9 @@ db.init_app(app)
 client = SearchClient.create('9GNCTQIKDP', 'c60b3e233b5bb52062c085eda75a761c')
 index = client.init_index('profdata')
 # gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
-f = open('mydata.json')
-data = json.load(f)
-f.close()
+# f = open('mydata.json')
+# data = json.load(f)
+# f.close()
 
 
 class User(UserMixin, db.Model):
@@ -102,7 +102,7 @@ def invalid_route(e):
 @app.route("/all-prof/<num>")
 def all_prof(num):
     prof_ratings = {}
-    for prof in data:
+    for prof in data[int(num)*12:(int(num)*12)+12]:
         avg_rating_da = db.session.query(func.avg(func.nullif(Review.da, '0') \
                                                   .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
         avg_rating_attend = db.session.query(func.avg(func.nullif(Review.attendance, '0') \
@@ -112,10 +112,10 @@ def all_prof(num):
         avg_rating_research = db.session.query(func.avg(func.nullif(Review.research, '0') \
                                                         .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
         try:
-            avg_rating_da = round(avg_rating_da, 1) if avg_rating_da is not None else "unrated"
-            avg_rating_attend = round(avg_rating_attend, 1) if avg_rating_attend is not None else "unrated"
-            avg_rating_marks = round(avg_rating_marks, 1) if avg_rating_marks is not None else "unrated"
-            avg_rating_research = round(avg_rating_research, 1) if avg_rating_research is not None else "unrated"
+            avg_rating_da = round(avg_rating_da, 1) if avg_rating_da is not None else "Unrated"
+            avg_rating_attend = round(avg_rating_attend, 1) if avg_rating_attend is not None else "Unrated"
+            avg_rating_marks = round(avg_rating_marks, 1) if avg_rating_marks is not None else "Unrated"
+            avg_rating_research = round(avg_rating_research, 1) if avg_rating_research is not None else "Unrated"
             # avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).scalar()
             # avg_rating_da = round(avg_rating_da, 1)
             prof_ratings[prof.id] = {"da": avg_rating_da, "attendance": avg_rating_attend, "marks": avg_rating_marks,
@@ -175,7 +175,10 @@ def logout():
 @app.route("/search", methods=["GET", "POST"])
 def search():
     prof_ratings = {}
-    for prof in data:
+    c = request.form.get("searchquery")
+    l = (index.search(c))["hits"]
+    leng = len(l)
+    for prof in data[0:leng]:
         avg_rating_da = db.session.query(func.avg(func.nullif(Review.da, '0') \
                                                   .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
         avg_rating_attend = db.session.query(func.avg(func.nullif(Review.attendance, '0') \

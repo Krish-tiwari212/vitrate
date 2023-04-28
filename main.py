@@ -172,37 +172,63 @@ def logout():
     return redirect("/")
 
 
+# @app.route("/search", methods=["GET", "POST"])
+# def search():
+#     prof_ratings = {}
+#     c = request.form.get("searchquery")
+#     l = (index.search(c))["hits"]
+#     leng = len(l)
+#     for prof in data[0:leng]:
+#         avg_rating_da = db.session.query(func.avg(func.nullif(Review.da, '0') \
+#                                                   .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
+#         avg_rating_attend = db.session.query(func.avg(func.nullif(Review.attendance, '0') \
+#                                                       .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
+#         avg_rating_marks = db.session.query(func.avg(func.nullif(Review.marks, '0') \
+#                                                      .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
+#         avg_rating_research = db.session.query(func.avg(func.nullif(Review.research, '0') \
+#                                                         .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
+#         try:
+#             avg_rating_da = round(avg_rating_da, 1) if avg_rating_da is not None else "Unrated"
+#             avg_rating_attend = round(avg_rating_attend, 1) if avg_rating_attend is not None else "Unrated"
+#             avg_rating_marks = round(avg_rating_marks, 1) if avg_rating_marks is not None else "Unrated"
+#             avg_rating_research = round(avg_rating_research, 1) if avg_rating_research is not None else "Unrated"
+#             # avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).scalar()
+#             # avg_rating_da = round(avg_rating_da, 1)
+#             prof_ratings[prof.id] = {"da": avg_rating_da, "attendance": avg_rating_attend, "marks": avg_rating_marks,
+#                                      "re": avg_rating_research}
+#         except TypeError:
+#             pass
+#
+#     c = request.form.get("searchquery")
+#     l = (index.search(c))["hits"]
+#     return render_template("search.html", li=l, leng=len(l), name=c, rating=prof_ratings)
+from sqlalchemy import func
+
+
 @app.route("/search", methods=["GET", "POST"])
 def search():
+    search_query = request.form.get("searchquery")
+    search_results = index.search(search_query)["hits"]
     prof_ratings = {}
-    c = request.form.get("searchquery")
-    l = (index.search(c))["hits"]
-    leng = len(l)
-    for prof in data[0:leng]:
-        avg_rating_da = db.session.query(func.avg(func.nullif(Review.da, '0') \
-                                                  .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
-        avg_rating_attend = db.session.query(func.avg(func.nullif(Review.attendance, '0') \
-                                                      .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
-        avg_rating_marks = db.session.query(func.avg(func.nullif(Review.marks, '0') \
-                                                     .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
-        avg_rating_research = db.session.query(func.avg(func.nullif(Review.research, '0') \
-                                                        .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
-        try:
-            avg_rating_da = round(avg_rating_da, 1) if avg_rating_da is not None else "Unrated"
-            avg_rating_attend = round(avg_rating_attend, 1) if avg_rating_attend is not None else "Unrated"
-            avg_rating_marks = round(avg_rating_marks, 1) if avg_rating_marks is not None else "Unrated"
-            avg_rating_research = round(avg_rating_research, 1) if avg_rating_research is not None else "Unrated"
-            # avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).scalar()
-            # avg_rating_da = round(avg_rating_da, 1)
-            prof_ratings[prof.id] = {"da": avg_rating_da, "attendance": avg_rating_attend, "marks": avg_rating_marks,
-                                     "re": avg_rating_research}
-        except TypeError:
-            pass
 
-    c = request.form.get("searchquery")
-    l = (index.search(c))["hits"]
-    return render_template("search.html", li=l, leng=len(l), name=c, rating=prof_ratings)
+    prof_ids = [result["id"] for result in search_results]
+    reviews = db.session.query(Review.prof_id,
+                               func.avg(func.nullif(Review.da, '0').cast(db.Integer)).label("da_avg"),
+                               func.avg(func.nullif(Review.attendance, '0').cast(db.Integer)).label("attendance_avg"),
+                               func.avg(func.nullif(Review.marks, '0').cast(db.Integer)).label("marks_avg"),
+                               func.avg(func.nullif(Review.research, '0').cast(db.Integer)).label("research_avg")
+                               ).filter(Review.prof_id.in_(prof_ids)).group_by(Review.prof_id).all()
 
+    for review in reviews:
+        prof_ratings[review.prof_id] = {
+            "da": round(review.da_avg, 1) if review.da_avg is not None else "Unrated",
+            "attendance": round(review.attendance_avg, 1) if review.attendance_avg is not None else "Unrated",
+            "marks": round(review.marks_avg, 1) if review.marks_avg is not None else "Unrated",
+            "re": round(review.research_avg, 1) if review.research_avg is not None else "Unrated"
+        }
+
+    return render_template("search.html", li=search_results, leng=len(search_results), name=search_query,
+                           rating=prof_ratings)
 
 @app.route("/review/<num>", methods=["GET", "POST"])
 @login_required

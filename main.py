@@ -201,9 +201,7 @@ def logout():
 #
 #     c = request.form.get("searchquery")
 #     l = (index.search(c))["hits"]
-#     return render_template("search.html", li=l, leng=len(l), name=c, rating=prof_ratings)
-from sqlalchemy import func
-
+#     return render_template("search.html", li=l, leng=len(l), name=c, rating=prof_rating
 
 @app.route("/search", methods=["GET", "POST"])
 def search():

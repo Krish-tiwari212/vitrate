@@ -4237,4 +4237,7 @@ input, select, textarea {
 .rating label{
     color:black;
 }
+.front p{
+    margin-top: 95%;
+}
 

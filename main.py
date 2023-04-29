@@ -104,6 +104,7 @@ def invalid_route(e):
 def all_prof(num):
     prof_ratings = {}
     for prof in data[int(num)*12:(int(num)*12)+12]:
+        num_ratings = db.session.query(func.count(Review.id)).filter_by(prof_id=prof.id).scalar() or 0
         avg_rating_da = db.session.query(func.avg(func.nullif(Review.da, '0') \
                                                   .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
         avg_rating_attend = db.session.query(func.avg(func.nullif(Review.attendance, '0') \
@@ -120,7 +121,7 @@ def all_prof(num):
             # avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).scalar()
             # avg_rating_da = round(avg_rating_da, 1)
             prof_ratings[prof.id] = {"da": avg_rating_da, "attendance": avg_rating_attend, "marks": avg_rating_marks,
-                                     "re": avg_rating_research}
+                                     "re": avg_rating_research, "num": num_ratings}
         except TypeError:
             pass
 
@@ -215,7 +216,8 @@ def search():
                                func.avg(func.nullif(Review.da, '0').cast(db.Integer)).label("da_avg"),
                                func.avg(func.nullif(Review.attendance, '0').cast(db.Integer)).label("attendance_avg"),
                                func.avg(func.nullif(Review.marks, '0').cast(db.Integer)).label("marks_avg"),
-                               func.avg(func.nullif(Review.research, '0').cast(db.Integer)).label("research_avg")
+                               func.avg(func.nullif(Review.research, '0').cast(db.Integer)).label("research_avg"),
+                               func.count(Review.id).label("num_ratings")
                                ).filter(Review.prof_id.in_(prof_ids)).group_by(Review.prof_id).all()
 
     for review in reviews:
@@ -223,7 +225,8 @@ def search():
             "da": round(review.da_avg, 1) if review.da_avg is not None else "Unrated",
             "attendance": round(review.attendance_avg, 1) if review.attendance_avg is not None else "Unrated",
             "marks": round(review.marks_avg, 1) if review.marks_avg is not None else "Unrated",
-            "re": round(review.research_avg, 1) if review.research_avg is not None else "Unrated"
+            "re": round(review.research_avg, 1) if review.research_avg is not None else "Unrated",
+            "num": review.num_ratings if review.num_ratings is not None else 0
         }
 
     return render_template("search.html", li=search_results, leng=len(search_results), name=search_query,

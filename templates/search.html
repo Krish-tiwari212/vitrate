@@ -18,17 +18,15 @@
                             <div class="card">
                                 <div class="front"
                                      style="background-image: url('{{l['image']}}');">
-                                     {% if l['id']|int in rating: %}
-                                     <p class="large">Total Ratings : {{ rating[l['id']]["num"] }}</p>
-                                     {% else: %}
-                                     <p class="large">Total Ratings : 0</p>
-                                    {% endif %}
                                 </div>
                                 <div class="back">
                                     <div>
                                         <div class="title">{{l['name']}} <span class="release_date">{{l['designation']}}</span>
                                         </div>
                                         <div class="rating">
+                                            {% if l['id']|int in rating: %}
+                                            <p class="large">Total Ratings : {{ rating[l['id']]['num'] }}</p>
+                                            {% endif %}
                                             <br>
                                             {% if l['id']|int in rating: %}
                                             <label>{{ rating[l['id']]["da"] }} ⭐ For Marks </label>

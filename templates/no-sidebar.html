@@ -20,13 +20,13 @@
                             <div class="card">
                                 <div class="front"
                                      style="background-image: url('{{l[i]['image']}}');">
-                                    <p class="large">Total Ratings : {{ rating[l[i]['id']]['num'] }}</p>
                                 </div>
                                 <div class="back">
                                     <div>
                                         <div class="title">{{l[i]['name']}} <span class="release_date">{{l[i]['designation']}}</span>
                                         </div>
                                         <div class="rating">
+                                            <p class="large">Total Ratings : {{ rating[l[i]['id']]['num'] }}</p>
                                             <br>
                                             {% if l[i]['id']|int in rating: %}
                                             <label>{{ rating[l[i]['id']]["da"] }} ⭐ For Marks </label>
@@ -64,6 +64,7 @@
                                         <div class="title">{{l[i]['name']}} <span class="release_date">{{l[i]['designation']}}</span>
                                         </div>
                                         <div class="rating">
+                                            <p class="large">Total Ratings : {{ rating[l[i]['id']]['num'] }}</p>
                                             <br>
                                             {% if l[i]['id']|int in rating: %}
                                             <p>{{ rating[l[i]['id']]["da"] }} ⭐ For Marks </p>

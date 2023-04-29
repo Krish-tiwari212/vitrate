@@ -6,6 +6,16 @@
         <header class="major">
             <h2>All Faculties Of VIT Chennai</h2>
             <p>Review and rate the faculties</p>
+            <form action="{{url_for('search')}}" method="post">
+                <div class="input-group mb-3">
+                    <input aria-describedby="basic-addon2" aria-label="search" class="form-control" name="searchquery"
+                           placeholder="Search For a Faculty" type="text">
+                    <div class="input-group-append">
+                        <button class="button primary small" type="submit"><i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </header>
 
         <!-- Content -->
@@ -43,8 +53,8 @@
                                             <a href="{{l[i]['link']}}"></a>
                                         </p>
 
-                                            <a class="button primary small fit update"
-                                                   href="{{url_for('review',num=l[i]['id'])}}">Rate or View Comments</a>
+                                        <a class="button primary small fit update"
+                                           href="{{url_for('review',num=l[i]['id'])}}">Rate or View Comments</a>
 
 
                                     </div>
@@ -82,7 +92,8 @@
                                         </p>
                                         <ul class="actions small">
                                             <li><a class="button primary small fit update"
-                                                   href="{{url_for('review',num=l[i]['id'])}}">Rate Or View Comments</a></li>
+                                                   href="{{url_for('review',num=l[i]['id'])}}">Rate Or View Comments</a>
+                                            </li>
                                         </ul>
 
                                     </div>

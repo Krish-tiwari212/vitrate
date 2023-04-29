@@ -5,6 +5,16 @@
     <div class="container">
         <header class="major">
             <h2>All Search Results For '{{name}}' Query</h2>
+            <form action="{{url_for('search')}}" method="post">
+                <div class="input-group mb-3">
+                    <input aria-describedby="basic-addon2" aria-label="search" class="form-control" name="searchquery"
+                           placeholder="Search For a Faculty" type="text">
+                    <div class="input-group-append">
+                        <button class="button primary small" type="submit"><i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
         </header>
 
         <!-- Content -->

@@ -4136,7 +4136,7 @@ input, select, textarea {
 }
  @media screen and (max-width: 800px) {
 	 .card {
-		 width: calc(100% - 3rem);
+		 width: 100%;
 	}
 }
  @media screen and (max-width: 500px) {

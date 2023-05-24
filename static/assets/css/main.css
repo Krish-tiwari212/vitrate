@@ -2410,6 +2410,10 @@ input, select, textarea {
 			border-radius: 0;
 			padding: 0;
 		}
+		.bg-body {
+			--bs-bg-opacity: 0;
+			background-color: rgba(var(--bs-body-bg-rgb),var(--bs-bg-opacity))!important;
+		}
 
 /* Icon */
 

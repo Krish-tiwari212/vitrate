@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, request, url_for
-from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
+from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user, AnonymousUserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -25,8 +25,8 @@ db.init_app(app)
 client = SearchClient.create('9GNCTQIKDP', 'c60b3e233b5bb52062c085eda75a761c')
 index = client.init_index('profdata')
 # gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
-# f = open('mydata.json')
-# data = json.load(f)
+f = open('mydata.json')
+data = json.load(f)
 # f.close()
 
 
@@ -38,14 +38,40 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(1000))
     year = db.Column(db.Integer)
     branch = db.Column(db.String(100))
-    review = db.relationship("Review", back_populates="author")
+    # review = db.relationship("Review", back_populates="author")
+
+
+
+class AnonymousUser(UserMixin, db.Model):
+    __tablename__ = 'anonymous_user'
+    id = db.Column(db.Integer, primary_key=True)
+
+    def __init__(self):
+        self._is_active = False
+
+    def is_authenticated(self):
+        return False
+
+    def is_anonymous(self):
+        return True
+
+    def get_id(self):
+        return str(self.id)
+
+    @property
+    def is_active(self):
+        return self._is_active
+
+    @is_active.setter
+    def is_active(self, value):
+        self._is_active = value
 
 
 class Review(db.Model):
     __tablename__ = 'review'
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    author = db.relationship("User", back_populates="review")
+    # author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    # author = db.relationship("User", back_populates="review")
     prof_id = db.Column(db.Integer, db.ForeignKey('prof_data.id'))
     prof = db.relationship("ProfData", back_populates="review")
     da = db.Column(db.VARCHAR(200))
@@ -53,6 +79,7 @@ class Review(db.Model):
     marks = db.Column(db.VARCHAR(200))
     research = db.Column(db.VARCHAR(200))
     # text = db.Column(db.TEXT, nullable=False)
+
 
 
 class ProfData(db.Model):
@@ -64,34 +91,30 @@ class ProfData(db.Model):
     image = db.Column(db.Text)
     review = db.relationship("Review", back_populates="prof")
 
+login_manager.anonymous_user = AnonymousUser
 
 with app.app_context():
-    # for elem in data:
-    #     new_prof = ProfData(name=elem["name"],designation=elem["designation"],link=elem["link"],image=elem["image"])
-    #     db.session.add(new_prof)
     db.create_all()
-    # db.session.commit()
     data = ProfData.query.all()
     rev = Review.query.all()
     c = User.query.all()
-
 
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect(url_for('login'))
 
 
+
 @login_manager.user_loader
 def load_user(user_id):
+    if user_id is None:
+        print("hello")
+        return AnonymousUser()
     return User.query.get(int(user_id))
 
 
 @app.route("/")
 def home():
-    # for elem in data:
-    #     new_prof = ProfData(name=elem["name"],designation=elem["designation"],link=elem["link"],image=elem["image"])
-    #     db.session.add(new_prof)
-    # db.session.commit()
     return render_template("index.html")
 
 
@@ -105,6 +128,7 @@ def all_prof(num):
     prof_ratings = {}
     for prof in data[int(num)*12:(int(num)*12)+12]:
         num_ratings = db.session.query(func.count(Review.id)).filter_by(prof_id=prof.id).scalar() or 0
+
         avg_rating_da = db.session.query(func.avg(func.nullif(Review.da, '0') \
                                                   .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
         avg_rating_attend = db.session.query(func.avg(func.nullif(Review.attendance, '0') \
@@ -118,8 +142,8 @@ def all_prof(num):
             avg_rating_attend = round(avg_rating_attend, 1) if avg_rating_attend is not None else "Unrated"
             avg_rating_marks = round(avg_rating_marks, 1) if avg_rating_marks is not None else "Unrated"
             avg_rating_research = round(avg_rating_research, 1) if avg_rating_research is not None else "Unrated"
-            # avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).scalar()
-            # avg_rating_da = round(avg_rating_da, 1)
+
+
             prof_ratings[prof.id] = {"da": avg_rating_da, "attendance": avg_rating_attend, "marks": avg_rating_marks,
                                      "re": avg_rating_research, "num": num_ratings}
         except TypeError:
@@ -177,37 +201,6 @@ def logout():
     return redirect("/")
 
 
-# @app.route("/search", methods=["GET", "POST"])
-# def search():
-#     prof_ratings = {}
-#     c = request.form.get("searchquery")
-#     l = (index.search(c))["hits"]
-#     leng = len(l)
-#     for prof in data[0:leng]:
-#         avg_rating_da = db.session.query(func.avg(func.nullif(Review.da, '0') \
-#                                                   .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
-#         avg_rating_attend = db.session.query(func.avg(func.nullif(Review.attendance, '0') \
-#                                                       .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
-#         avg_rating_marks = db.session.query(func.avg(func.nullif(Review.marks, '0') \
-#                                                      .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
-#         avg_rating_research = db.session.query(func.avg(func.nullif(Review.research, '0') \
-#                                                         .cast(db.Integer))).filter_by(prof_id=prof.id).scalar()
-#         try:
-#             avg_rating_da = round(avg_rating_da, 1) if avg_rating_da is not None else "Unrated"
-#             avg_rating_attend = round(avg_rating_attend, 1) if avg_rating_attend is not None else "Unrated"
-#             avg_rating_marks = round(avg_rating_marks, 1) if avg_rating_marks is not None else "Unrated"
-#             avg_rating_research = round(avg_rating_research, 1) if avg_rating_research is not None else "Unrated"
-#             # avg_rating_da = db.session.query(func.avg(Review.da)).filter_by(prof_id=prof.id).scalar()
-#             # avg_rating_da = round(avg_rating_da, 1)
-#             prof_ratings[prof.id] = {"da": avg_rating_da, "attendance": avg_rating_attend, "marks": avg_rating_marks,
-#                                      "re": avg_rating_research}
-#         except TypeError:
-#             pass
-#
-#     c = request.form.get("searchquery")
-#     l = (index.search(c))["hits"]
-#     return render_template("search.html", li=l, leng=len(l), name=c, rating=prof_rating
-
 @app.route("/search", methods=["GET", "POST"])
 def search():
     search_query = request.form.get("searchquery")
@@ -236,14 +229,14 @@ def search():
                            rating=prof_ratings)
 
 @app.route("/review/<num>", methods=["GET", "POST"])
-@login_required
 def review(num):
     if request.method == "POST":
         o = ProfData.query.filter_by(id=int(num)).first()
-        new_review = Review(author=current_user, attendance=request.form.get("attend"), da=request.form.get("da"),
+        new_review = Review(attendance=request.form.get("attend"), da=request.form.get("da"),
                             marks=request.form.get("marks"), research=request.form.get("research"), prof=o)
         db.session.add(new_review)
         db.session.commit()
+        print(current_user.id)
         return redirect("/")
     return render_template("review.html", n=num)
 
@@ -253,4 +246,4 @@ def review(num):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

@@ -26,7 +26,7 @@
 							</li>
 							<li><a href="{{url_for('help')}}">Help</a></li>
 
-							{% if not current_user.is_authenticated: %}
+							{% if not current_user.is_authenticated or current_user.id==None: %}
 							<li><a href="{{url_for('signup')}}" class="button primary">Sign Up</a></li>
 							<li><a href="{{url_for('login')}}" class="button primary">Log In</a></li>
 							{% else: %}

@@ -5,7 +5,7 @@
     "scripts": {
         "build": "pip install -r requirements.txt",
         "test": "echo \"No test specified\" && exit 1",
-        "start": "gunicorn main:app"
+        "start": "waitress-serve --listen='127.0.0.1:5000' main:app"
     },
     "repository": {
         "type": "git",

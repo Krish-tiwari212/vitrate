@@ -24,7 +24,7 @@
                 <div class="container">
 
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2  row-cols-lg-3">
-                        {% if (n|int*12)+12<1138: %}
+                        {% if (n|int*12)+12<1251: %}
                         {% for i in range(n|int*12,(n|int*12)+12): %}
                         <div class="col">
                             <div class="card">
@@ -63,7 +63,7 @@
                         </div>
                         {% endfor %}
                         {% else: %}
-                        {% for i in range(n|int*12,1138): %}
+                        {% for i in range(n|int*12,1251): %}
                         <div class="col">
                             <div class="card">
                                 <div class="front"
@@ -107,7 +107,7 @@
             </div>
             <div class="d-flex justify-content-center">
                 <ul class="actions small">
-                    {% if n|int ==-1 or n|int ==94: %}
+                    {% if n|int ==-1 or n|int ==105: %}
                     <li><a class="button small fit" href="{{url_for('all_prof',num=n|int-1)}}">Back</a></li>
                     <li><a class="button small fit" href="{{url_for('all_prof',num=0)}}">1st</a></li>
                     <li><a class="button primary small fit" href="{{url_for('all_prof',num=n|int-2)}}">{{n|int-2}}</a>
@@ -120,7 +120,7 @@
                     <li><a class="button primary small fit" href="{{url_for('all_prof',num=n)}}">{{n|int+1}}</a></li>
                     <li><a class="button small fit" href="{{url_for('all_prof',num=n|int+1)}}">{{n|int+2}}</a></li>
                     <li><a class="button small fit" href="{{url_for('all_prof',num=n|int+2)}}">{{n|int+3}}</a></li>
-                    <li><a class="button small fit" href="{{url_for('all_prof',num=94)}}">Last</a></li>
+                    <li><a class="button small fit" href="{{url_for('all_prof',num=105)}}">Last</a></li>
                     {% endif %}
                 </ul>
             </div>

@@ -107,7 +107,7 @@
             </div>
             <div class="d-flex justify-content-center">
                 <ul class="actions small">
-                    {% if n|int ==-1 or n|int ==105: %}
+                    {% if n|int ==-1 or n|int ==104: %}
                     <li><a class="button small fit" href="{{url_for('all_prof',num=n|int-1)}}">Back</a></li>
                     <li><a class="button small fit" href="{{url_for('all_prof',num=0)}}">1st</a></li>
                     <li><a class="button primary small fit" href="{{url_for('all_prof',num=n|int-2)}}">{{n|int-2}}</a>
@@ -120,7 +120,7 @@
                     <li><a class="button primary small fit" href="{{url_for('all_prof',num=n)}}">{{n|int+1}}</a></li>
                     <li><a class="button small fit" href="{{url_for('all_prof',num=n|int+1)}}">{{n|int+2}}</a></li>
                     <li><a class="button small fit" href="{{url_for('all_prof',num=n|int+2)}}">{{n|int+3}}</a></li>
-                    <li><a class="button small fit" href="{{url_for('all_prof',num=105)}}">Last</a></li>
+                    <li><a class="button small fit" href="{{url_for('all_prof',num=104)}}">Last</a></li>
                     {% endif %}
                 </ul>
             </div>

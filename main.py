@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, send_from_directory
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user, AnonymousUserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
@@ -240,6 +240,9 @@ def review(num):
         return redirect("/")
     return render_template("review.html", n=num)
 
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 # @app.route("/comment/<num>", methods=["GET","POST"])
 # def comment(num):

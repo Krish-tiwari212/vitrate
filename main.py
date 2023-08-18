@@ -239,7 +239,8 @@ def review(num):
         print(current_user.id)
         return redirect("/")
     return render_template("review.html", n=num)
-
+    
+@app.route('/ads.txt')
 @app.route('/sitemap.xml')
 def static_from_root():
     return send_from_directory(app.static_folder, request.path[1:])

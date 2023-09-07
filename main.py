@@ -251,4 +251,4 @@ def static_from_root():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

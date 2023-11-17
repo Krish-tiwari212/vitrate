@@ -24,7 +24,7 @@ login_manager.session_protection = "strong"
 db = SQLAlchemy()
 db.init_app(app)
 client = SearchClient.create('5R46Z5I6CN', '7310b2309a0364bd69e8afe3016c5298')
-index = client.init_index('profdata')
+index = client.init_index('mydata')
 # gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
 f = open('mydata.json')
 data = json.load(f)
